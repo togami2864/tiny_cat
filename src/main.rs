@@ -1,4 +1,5 @@
 use std::env;
+use std::error::Error;
 use std::fs::File;
 use std::io::prelude::*;
 use std::process;
@@ -9,11 +10,10 @@ fn main() {
         eprintln!("Problem parsing arguments:{}", err);
         process::exit(1)
     });
-    let mut f = File::open(&config.filename).expect("There are no files");
-    let mut contents = String::new();
-    f.read_to_string(&mut contents)
-        .expect("something went wrong reading the file");
-    println!("{}", contents);
+    if let Err(e) = run(&config.filename) {
+        eprintln!("Application error: {}", e);
+        process::exit(1);
+    }
 }
 
 struct Config {
@@ -28,4 +28,12 @@ impl Config {
         let filename = args[1].clone();
         Ok(Config { filename })
     }
+}
+
+fn run(filename: &String) -> Result<(), Box<Error>> {
+    let mut f = File::open(&filename)?;
+    let mut contents = String::new();
+    f.read_to_string(&mut contents)?;
+    println!("{}", contents);
+    Ok(())
 }
