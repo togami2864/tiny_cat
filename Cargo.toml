@@ -1,5 +1,5 @@
 [package]
-name = "tiny_cat"
+name = "tinycat"
 version = "0.1.0"
 authors = ["Yoshiaki Togami <tuabobo123@gmail.com>"]
 edition = "2018"
